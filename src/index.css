@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 20% 8%;
+    --foreground: 45 100% 50%;
+
+    --card: 220 25% 12%;
+    --card-foreground: 45 100% 50%;
+
+    --popover: 220 25% 12%;
+    --popover-foreground: 45 100% 50%;
+
+    --primary: 45 100% 50%;
+    --primary-foreground: 220 20% 8%;
+
+    --secondary: 220 25% 18%;
+    --secondary-foreground: 45 100% 50%;
+
+    --muted: 220 20% 20%;
+    --muted-foreground: 45 30% 70%;
+
+    --accent: 45 100% 50%;
+    --accent-foreground: 220 20% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 45 60% 30%;
+    --input: 220 25% 18%;
+    --ring: 45 100% 50%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 20% 8%;
+    --sidebar-foreground: 45 100% 50%;
+    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 220 25% 15%;
+    --sidebar-accent-foreground: 45 100% 50%;
+    --sidebar-border: 45 60% 30%;
+    --sidebar-ring: 45 100% 50%;
+
+    /* Custom Lucky Draw tokens */
+    --lucky-gold: 45 100% 50%;
+    --lucky-gold-glow: 45 100% 60%;
+    --lucky-dark: 220 25% 10%;
+    --lucky-darker: 220 25% 6%;
+    --lucky-border: 45 80% 40%;
+    --lucky-slot-bg: 220 30% 14%;
+  }
+
+  .dark {
+    --background: 220 20% 8%;
+    --foreground: 45 100% 50%;
+    --card: 220 25% 12%;
+    --card-foreground: 45 100% 50%;
+    --popover: 220 25% 12%;
+    --popover-foreground: 45 100% 50%;
+    --primary: 45 100% 50%;
+    --primary-foreground: 220 20% 8%;
+    --secondary: 220 25% 18%;
+    --secondary-foreground: 45 100% 50%;
+    --muted: 220 20% 20%;
+    --muted-foreground: 45 30% 70%;
+    --accent: 45 100% 50%;
+    --accent-foreground: 220 20% 8%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 45 60% 30%;
+    --input: 220 25% 18%;
+    --ring: 45 100% 50%;
+    --sidebar-background: 220 20% 8%;
+    --sidebar-foreground: 45 100% 50%;
+    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 220 25% 15%;
+    --sidebar-accent-foreground: 45 100% 50%;
+    --sidebar-border: 45 60% 30%;
+    --sidebar-ring: 45 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .lucky-glow {
+    box-shadow: 
+      0 0 20px hsl(45 100% 50% / 0.3),
+      0 0 40px hsl(45 100% 50% / 0.2),
+      0 0 60px hsl(45 100% 50% / 0.1),
+      inset 0 0 20px hsl(45 100% 50% / 0.05);
+  }
+
+  .lucky-glow-intense {
+    box-shadow: 
+      0 0 30px hsl(45 100% 50% / 0.5),
+      0 0 60px hsl(45 100% 50% / 0.3),
+      0 0 90px hsl(45 100% 50% / 0.2);
+  }
+
+  .lucky-text-glow {
+    text-shadow: 
+      0 0 10px hsl(45 100% 50% / 0.8),
+      0 0 20px hsl(45 100% 50% / 0.6),
+      0 0 30px hsl(45 100% 50% / 0.4);
+  }
+
+  .slot-spin {
+    animation: slotSpin 0.1s linear infinite;
+  }
+
+  @keyframes slotSpin {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .particle {
+    animation: twinkle 2s ease-in-out infinite;
+  }
+}
