@@ -57,6 +57,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        lucky: {
+          gold: "hsl(var(--lucky-gold))",
+          "gold-glow": "hsl(var(--lucky-gold-glow))",
+          dark: "hsl(var(--lucky-dark))",
+          darker: "hsl(var(--lucky-darker))",
+          border: "hsl(var(--lucky-border))",
+          slot: "hsl(var(--lucky-slot-bg))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
