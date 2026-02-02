@@ -159,7 +159,7 @@ const LuckyDraw = () => {
 
       <div className="flex items-center gap-2 text-muted-foreground mb-6 sm:mb-8 z-10">
         <Gift className="w-4 h-4 sm:w-5 sm:h-5" />
-        <span className="text-sm sm:text-base">Sự kiện cuối năm 2024</span>
+        <span className="text-sm sm:text-base">Sự kiện cuối năm 2026</span>
         <Gift className="w-4 h-4 sm:w-5 sm:h-5" />
       </div>
 
