@@ -167,7 +167,7 @@ const LuckyDraw = () => {
         />
       </div> */}
 
-      <h1 className="font-display text-4xl sm:text-5xl md:text-7xl text-lucky-gold lucky-text-glow mb-2 sm:mb-6 z-10 tracking-wider mt-[180px]">
+      <h1 className="font-display text-4xl sm:text-5xl md:text-7xl text-lucky-gold lucky-text-glow mb-5 sm:mb-10 z-10 tracking-wider mt-[200px]">
         LUCKY DRAW
       </h1>
       {/* 
@@ -178,7 +178,7 @@ const LuckyDraw = () => {
       </div> */}
 
       {/* Number Display */}
-      <div className="relative mb-5 sm:mb-5 z-10">
+      <div className="relative mb-5 sm:mb-10 z-10">
         <div className="bg-card rounded-2xl p-6 sm:p-8 border-2 border-lucky-border lucky-glow">
           <div className="flex gap-3 sm:gap-4 md:gap-6">
             <NumberSlot value={digits[0]} isSpinning={isSpinning} delay={0} />
@@ -186,15 +186,6 @@ const LuckyDraw = () => {
             <NumberSlot value={digits[2]} isSpinning={isSpinning} delay={400} />
           </div>
         </div>
-      </div>
-
-      {/* Remaining Numbers Info */}
-      <div className="text-muted-foreground text-sm mb-4 z-10">
-        Còn lại:{" "}
-        <span className="text-lucky-gold font-bold">
-          {availableNumbers.length}
-        </span>{" "}
-        số
       </div>
 
       {/* Spin Button */}
@@ -206,9 +197,11 @@ const LuckyDraw = () => {
         />
       </div>
 
+
+
       {/* Range Selector */}
       {showHistory && (
-        <div className="mb-6 sm:mb-8 z-10 mt-[200px]">
+        <div className="mb-5 sm:mb-5 z-10 mt-[200px]">
           <RangeSelector
             minValue={minValue}
             maxValue={maxValue}
@@ -217,6 +210,17 @@ const LuckyDraw = () => {
             disabled={isSpinning}
           />
         </div>
+      )}
+
+            {/* remaining */}
+      {showHistory && (
+      <div className="text-muted-foreground text-sm mb-4 z-10">
+        Còn lại:{" "}
+        <span className="text-lucky-gold font-bold">
+          {availableNumbers.length}
+        </span>{" "}
+        số
+      </div>
       )}
 
       {/* History Panel */}
