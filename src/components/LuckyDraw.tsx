@@ -167,7 +167,7 @@ const LuckyDraw = () => {
         />
       </div> */}
 
-      <h1 className="font-display text-4xl sm:text-5xl md:text-7xl text-lucky-gold lucky-text-glow mb-2 sm:mb-6 z-10 tracking-wider mt-[160px]">
+      <h1 className="font-display text-4xl sm:text-5xl md:text-7xl text-lucky-gold lucky-text-glow mb-2 sm:mb-6 z-10 tracking-wider mt-[180px]">
         LUCKY DRAW
       </h1>
       {/* 
@@ -184,11 +184,6 @@ const LuckyDraw = () => {
             <NumberSlot value={digits[0]} isSpinning={isSpinning} delay={0} />
             <NumberSlot value={digits[1]} isSpinning={isSpinning} delay={200} />
             <NumberSlot value={digits[2]} isSpinning={isSpinning} delay={400} />
-          </div>
-          <div className="flex justify-center gap-2 mt-4">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <div key={i} className="w-2 h-2 rounded-full bg-lucky-border" />
-            ))}
           </div>
         </div>
       </div>
@@ -212,15 +207,17 @@ const LuckyDraw = () => {
       </div>
 
       {/* Range Selector */}
-      <div className="mb-6 sm:mb-8 z-10">
-        <RangeSelector
-          minValue={minValue}
-          maxValue={maxValue}
-          onMinChange={setMinValue}
-          onMaxChange={setMaxValue}
-          disabled={isSpinning}
-        />
-      </div>
+      {showHistory && (
+        <div className="mb-6 sm:mb-8 z-10 mt-[200px]">
+          <RangeSelector
+            minValue={minValue}
+            maxValue={maxValue}
+            onMinChange={setMinValue}
+            onMaxChange={setMaxValue}
+            disabled={isSpinning}
+          />
+        </div>
+      )}
 
       {/* History Panel */}
       {showHistory && (
