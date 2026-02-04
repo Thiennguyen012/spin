@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import confetti from "canvas-confetti";
-import { Gift, PartyPopper, Star, ChevronUp, ChevronDown } from "lucide-react";
+import { Gift, PartyPopper, Star, Settings } from "lucide-react";
 import NumberSlot from "./NumberSlot";
 import SpinButton from "./SpinButton";
 import RangeSelector from "./RangeSelector";
@@ -18,7 +18,7 @@ import {
 
 const LuckyDraw = () => {
   const [minValue, setMinValue] = useState(1);
-  const [maxValue, setMaxValue] = useState<number | null>(null);
+  const [maxValue, setMaxValue] = useState<number | null>(199);
   const [currentNumber, setCurrentNumber] = useState<number | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [history, setHistory] = useState<number[]>([]);
@@ -31,7 +31,7 @@ const LuckyDraw = () => {
     const savedRange = getRangeSettings();
     if (savedRange) {
       setMinValue(savedRange.minValue);
-      setMaxValue(savedRange.maxValue);
+      setMaxValue(savedRange.maxValue ?? 199);
     }
 
     // Load history
@@ -179,11 +179,7 @@ const LuckyDraw = () => {
         className="fixed bottom-4 right-4 z-20 p-2 rounded-lg bg-lucky-gold/10 hover:bg-lucky-gold/20 text-lucky-gold transition-colors"
         title={showHistory ? "Hide history" : "Show history"}
       >
-        {showHistory ? (
-          <ChevronDown className="w-6 h-6" />
-        ) : (
-          <ChevronUp className="w-6 h-6" />
-        )}
+        <Settings className="w-6 h-6" />
       </button>
 
       {/* Header */}
