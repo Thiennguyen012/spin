@@ -1,10 +1,10 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from "lucide-react";
 
 interface RangeSelectorProps {
   minValue: number;
-  maxValue: number;
+  maxValue: number | null;
   onMinChange: (value: number) => void;
-  onMaxChange: (value: number) => void;
+  onMaxChange: (value: number | null) => void;
   disabled: boolean;
 }
 
@@ -17,7 +17,9 @@ const RangeSelector = ({
 }: RangeSelectorProps) => {
   return (
     <div className="flex items-center gap-3 sm:gap-4 bg-secondary/50 rounded-full px-6 py-3 border border-lucky-border/30">
-      <span className="text-muted-foreground text-sm sm:text-base font-medium">TỪ:</span>
+      <span className="text-muted-foreground text-sm sm:text-base font-medium">
+        TỪ:
+      </span>
       <input
         type="number"
         value={minValue}
@@ -29,13 +31,18 @@ const RangeSelector = ({
                    disabled:opacity-50"
       />
       <ArrowRight className="w-5 h-5 text-muted-foreground" />
-      <span className="text-muted-foreground text-sm sm:text-base font-medium">ĐẾN:</span>
+      <span className="text-muted-foreground text-sm sm:text-base font-medium">
+        ĐẾN:
+      </span>
       <input
         type="number"
-        value={maxValue}
-        onChange={(e) => onMaxChange(parseInt(e.target.value) || 999)}
+        value={maxValue ?? ""}
+        onChange={(e) =>
+          onMaxChange(e.target.value ? parseInt(e.target.value) : null)
+        }
         disabled={disabled}
         min={minValue + 1}
+        placeholder="Empty"
         className="w-16 sm:w-20 bg-input rounded-lg px-3 py-2 text-center text-lucky-gold font-bold 
                    border border-lucky-border/30 focus:border-lucky-gold focus:outline-none
                    disabled:opacity-50"

@@ -4,6 +4,8 @@ interface SpinRecord {
   number: number;
   timestamp: string;
   date: Date;
+  minRange: number;
+  maxRange: number;
 }
 
 interface SpinHistory {
@@ -14,7 +16,7 @@ interface SpinHistory {
   updatedAt: string;
 }
 
-const STORAGE_KEY = 'lucky_spin_history';
+const STORAGE_KEY = "lucky_spin_history";
 
 /**
  * Save spin number to history (localStorage)
@@ -22,7 +24,7 @@ const STORAGE_KEY = 'lucky_spin_history';
 export const saveSpinToHistory = (
   number: number,
   minRange: number,
-  maxRange: number
+  maxRange: number,
 ): void => {
   try {
     const existing = localStorage.getItem(STORAGE_KEY);
@@ -45,6 +47,8 @@ export const saveSpinToHistory = (
       number,
       timestamp: new Date().toISOString(),
       date: new Date(),
+      minRange,
+      maxRange,
     };
 
     history.records.push(newRecord);
@@ -54,7 +58,7 @@ export const saveSpinToHistory = (
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
   } catch (error) {
-    console.error('Error saving spin to history:', error);
+    console.error("Error saving spin to history:", error);
   }
 };
 
@@ -66,7 +70,7 @@ export const getSpinHistory = (): SpinHistory | null => {
     const data = localStorage.getItem(STORAGE_KEY);
     return data ? JSON.parse(data) : null;
   } catch (error) {
-    console.error('Error retrieving spin history:', error);
+    console.error("Error retrieving spin history:", error);
     return null;
   }
 };
@@ -78,7 +82,7 @@ export const clearSpinHistory = (): void => {
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (error) {
-    console.error('Error clearing spin history:', error);
+    console.error("Error clearing spin history:", error);
   }
 };
 
@@ -89,7 +93,7 @@ export const exportHistoryAsJSON = (): void => {
   try {
     const history = getSpinHistory();
     if (!history || history.records.length === 0) {
-      alert('No spin history to export!');
+      alert("No spin history to export!");
       return;
     }
 
@@ -103,11 +107,11 @@ export const exportHistoryAsJSON = (): void => {
     };
 
     const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
 
     // Create download link
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `lucky_spin_history_${new Date().toISOString().slice(0, 10)}.json`;
     document.body.appendChild(link);
@@ -115,8 +119,8 @@ export const exportHistoryAsJSON = (): void => {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Error exporting history:', error);
-    alert('Error exporting history!');
+    console.error("Error exporting history:", error);
+    alert("Error exporting history!");
   }
 };
 
@@ -127,28 +131,32 @@ export const exportHistoryAsCSV = (): void => {
   try {
     const history = getSpinHistory();
     if (!history || history.records.length === 0) {
-      alert('No spin history to export!');
+      alert("No spin history to export!");
       return;
     }
 
-    // Create CSV content
-    const headers = ['Order', 'Number', 'Time'];
+    // Create CSV content with range info for each record
+    const headers = ["Order", "From", "To", "Number", "Time"];
     const rows = history.records.map((record, index) => [
       index + 1,
+      record.minRange,
+      record.maxRange,
       record.number,
-      new Date(record.timestamp).toLocaleString('en-US'),
+      new Date(record.timestamp).toLocaleString("en-US"),
     ]);
 
     const csvContent = [
-      headers.join(','),
-      ...rows.map((row) => row.join(',')),
-    ].join('\n');
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
 
-    const dataBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const dataBlob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
     const url = URL.createObjectURL(dataBlob);
 
     // Create download link
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `lucky_spin_history_${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(link);
@@ -156,8 +164,8 @@ export const exportHistoryAsCSV = (): void => {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Error exporting history as CSV:', error);
-    alert('Error exporting history!');
+    console.error("Error exporting history as CSV:", error);
+    alert("Error exporting history!");
   }
 };
 
@@ -167,4 +175,43 @@ export const exportHistoryAsCSV = (): void => {
 export const getSpinCount = (): number => {
   const history = getSpinHistory();
   return history?.records.length ?? 0;
+};
+
+/**
+ * Save the range (min, max) to localStorage
+ */
+export const saveRangeSettings = (minValue: number, maxValue: number): void => {
+  try {
+    const rangeSettings = {
+      minValue,
+      maxValue,
+      savedAt: new Date().toISOString(),
+    };
+    localStorage.setItem("lucky_range_settings", JSON.stringify(rangeSettings));
+  } catch (error) {
+    console.error("Error saving range settings:", error);
+  }
+};
+
+/**
+ * Get the saved range settings from localStorage
+ */
+export const getRangeSettings = (): {
+  minValue: number;
+  maxValue: number;
+} | null => {
+  try {
+    const data = localStorage.getItem("lucky_range_settings");
+    if (data) {
+      const settings = JSON.parse(data);
+      return {
+        minValue: settings.minValue,
+        maxValue: settings.maxValue,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Error retrieving range settings:", error);
+    return null;
+  }
 };

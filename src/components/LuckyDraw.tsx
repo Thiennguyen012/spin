@@ -12,42 +12,62 @@ import {
   exportHistoryAsJSON,
   exportHistoryAsCSV,
   getSpinHistory,
+  saveRangeSettings,
+  getRangeSettings,
 } from "@/lib/historyStorage";
 
 const LuckyDraw = () => {
   const [minValue, setMinValue] = useState(1);
-  const [maxValue, setMaxValue] = useState(999);
+  const [maxValue, setMaxValue] = useState<number | null>(null);
   const [currentNumber, setCurrentNumber] = useState<number | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [history, setHistory] = useState<number[]>([]);
   const [availableNumbers, setAvailableNumbers] = useState<number[]>([]);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Load history from localStorage on mount
+  // Load history and range settings from localStorage on mount
   useEffect(() => {
+    // Load range settings
+    const savedRange = getRangeSettings();
+    if (savedRange) {
+      setMinValue(savedRange.minValue);
+      setMaxValue(savedRange.maxValue);
+    }
+
+    // Load history
     const savedHistory = getSpinHistory();
     if (savedHistory && savedHistory.records.length > 0) {
       const historyNumbers = savedHistory.records.map(
         (record) => record.number,
       );
       setHistory(historyNumbers);
-      // Set current number to the last spin result
-      if (historyNumbers.length > 0) {
-        setCurrentNumber(historyNumbers[historyNumbers.length - 1]);
-      }
     }
   }, []);
 
   // Initialize available numbers
   useEffect(() => {
     const numbers: number[] = [];
-    for (let i = minValue; i <= maxValue; i++) {
-      if (!history.includes(i)) {
-        numbers.push(i);
+    // Use savedRange if maxValue is null
+    let effectiveMaxValue = maxValue;
+    if (effectiveMaxValue === null) {
+      const savedRange = getRangeSettings();
+      effectiveMaxValue = savedRange?.maxValue || null;
+    }
+
+    if (effectiveMaxValue !== null) {
+      for (let i = minValue; i <= effectiveMaxValue; i++) {
+        if (!history.includes(i)) {
+          numbers.push(i);
+        }
       }
     }
     setAvailableNumbers(numbers);
   }, [minValue, maxValue, history]);
+
+  // Save range settings whenever they change
+  useEffect(() => {
+    saveRangeSettings(minValue, maxValue);
+  }, [minValue, maxValue]);
 
   const fireConfetti = useCallback(() => {
     const duration = 3000;
@@ -101,6 +121,18 @@ const LuckyDraw = () => {
   }, []);
 
   const handleSpin = useCallback(() => {
+    // Check if maxValue is empty and fallback to localStorage
+    let effectiveMaxValue = maxValue;
+    if (effectiveMaxValue === null) {
+      const savedRange = getRangeSettings();
+      effectiveMaxValue = savedRange?.maxValue || null;
+    }
+
+    if (effectiveMaxValue === null) {
+      alert("Vui lòng nhập giá trị tối đa cho phạm vi!");
+      return;
+    }
+
     if (availableNumbers.length === 0) {
       alert("Đã hết số để quay! Vui lòng xóa lịch sử hoặc điều chỉnh phạm vi.");
       return;
@@ -115,8 +147,8 @@ const LuckyDraw = () => {
     setTimeout(() => {
       setCurrentNumber(selectedNumber);
       setHistory((prev) => [...prev, selectedNumber]);
-      // Lưu vào localStorage
-      saveSpinToHistory(selectedNumber, minValue, maxValue);
+      // Lưu vào localStorage with the effective max value
+      saveSpinToHistory(selectedNumber, minValue, effectiveMaxValue);
       setIsSpinning(false);
       fireConfetti();
     }, 2500);
@@ -197,8 +229,6 @@ const LuckyDraw = () => {
         />
       </div>
 
-
-
       {/* Range Selector */}
       {showHistory && (
         <div className="mb-5 sm:mb-5 z-10 mt-[200px]">
@@ -212,15 +242,15 @@ const LuckyDraw = () => {
         </div>
       )}
 
-            {/* remaining */}
+      {/* remaining */}
       {showHistory && (
-      <div className="text-muted-foreground text-sm mb-4 z-10">
-        Còn lại:{" "}
-        <span className="text-lucky-gold font-bold">
-          {availableNumbers.length}
-        </span>{" "}
-        số
-      </div>
+        <div className="text-muted-foreground text-sm mb-4 z-10">
+          Còn lại:{" "}
+          <span className="text-lucky-gold font-bold">
+            {availableNumbers.length}
+          </span>{" "}
+          số
+        </div>
       )}
 
       {/* History Panel */}
