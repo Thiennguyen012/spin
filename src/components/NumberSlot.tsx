@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface NumberSlotProps {
   value: number;
@@ -21,7 +21,7 @@ const NumberSlot = ({ value, isSpinning, delay = 0 }: NumberSlotProps) => {
         clearInterval(interval);
         setSpinning(false);
         setDisplayValue(value);
-      }, 2000 + delay);
+      }, 4500);
 
       return () => {
         clearInterval(interval);
@@ -29,8 +29,9 @@ const NumberSlot = ({ value, isSpinning, delay = 0 }: NumberSlotProps) => {
       };
     } else {
       setDisplayValue(value);
+      setSpinning(false);
     }
-  }, [isSpinning, value, delay]);
+  }, [isSpinning, value]);
 
   return (
     <div
@@ -39,14 +40,14 @@ const NumberSlot = ({ value, isSpinning, delay = 0 }: NumberSlotProps) => {
         bg-lucky-slot rounded-lg border-2 border-lucky-border
         flex items-center justify-center
         transition-all duration-300
-        ${spinning ? 'lucky-glow-intense' : ''}
+        ${spinning ? "lucky-glow-intense" : ""}
       `}
     >
       <span
         className={`
           font-display text-6xl sm:text-7xl md:text-8xl text-lucky-gold
           transition-all duration-100
-          ${spinning ? 'blur-sm' : 'lucky-text-glow'}
+          ${spinning ? "blur-sm" : "lucky-text-glow"}
         `}
       >
         {displayValue}

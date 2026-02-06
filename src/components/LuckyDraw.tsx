@@ -6,6 +6,7 @@ import SpinButton from "./SpinButton";
 import RangeSelector from "./RangeSelector";
 import HistoryPanel from "./HistoryPanel";
 import ParticleBackground from "./ParticleBackground";
+import { useSound } from "@/hooks/useSound";
 import {
   saveSpinToHistory,
   clearSpinHistory,
@@ -24,6 +25,9 @@ const LuckyDraw = () => {
   const [history, setHistory] = useState<number[]>([]);
   const [availableNumbers, setAvailableNumbers] = useState<number[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+
+  // Initialize sound hook
+  const playSpinSound = useSound("/sounds/spin.mp3");
 
   // Load history and range settings from localStorage on mount
   useEffect(() => {
@@ -139,6 +143,7 @@ const LuckyDraw = () => {
     }
 
     setIsSpinning(true);
+    playSpinSound();
 
     // Pick a random number from available numbers
     const randomIndex = Math.floor(Math.random() * availableNumbers.length);
@@ -151,7 +156,7 @@ const LuckyDraw = () => {
       saveSpinToHistory(selectedNumber, minValue, effectiveMaxValue);
       setIsSpinning(false);
       fireConfetti();
-    }, 2500);
+    }, 4500);
   }, [availableNumbers, fireConfetti, minValue, maxValue]);
 
   const handleClearHistory = () => {
